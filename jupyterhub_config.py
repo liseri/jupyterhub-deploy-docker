@@ -14,7 +14,12 @@ c = get_config()  # noqa: F821
 c.JupyterHub.spawner_class = "dockerspawner.DockerSpawner"
 
 # Spawn containers from this image
-c.DockerSpawner.image = os.environ["DOCKER_NOTEBOOK_IMAGE"]
+# c.DockerSpawner.image = os.environ["DOCKER_NOTEBOOK_IMAGE"]
+c.DockerSpawner.allowed_images = {
+    "mini(基础python环境)": "jupyter/minimal-notebook:hub-3.1.1",
+    "scipy(机器学习环境)": "jupyter/scipy-notebook:hub-3.1.1",
+    "ai(高级AI环境)": "hk/ai-notebook:hub-3.1.1"
+    }
 
 # JupyterHub requires a single-user instance of the Notebook server, so we
 # default to using the `start-singleuser.sh` script included in the
@@ -38,10 +43,17 @@ c.DockerSpawner.notebook_dir = notebook_dir
 
 # Mount the real user's Docker volume on the host to the notebook user's
 # notebook directory in the container
-c.DockerSpawner.volumes = {"jupyterhub-user-{username}": notebook_dir}
+c.DockerSpawner.volumes = {"jupyterhub-user-{username}": notebook_dir,
+                           "jupyterhub-sharedfiles": {
+                                'bind': '/home/jovyan/work/share',
+                                'mode': 'rw' },
+                           "jupyterhub-shared-readonly": {
+                                'bind': '/home/jovyan/work/必读',
+                                'mode': 'ro' }
+                        }
 
 # Remove containers once they are stopped
-c.DockerSpawner.remove = True
+c.DockerSpawner.remove = False
 
 # For debugging arguments passed to spawned containers
 c.DockerSpawner.debug = True
@@ -58,9 +70,20 @@ c.JupyterHub.db_url = "sqlite:////data/jupyterhub.sqlite"
 c.JupyterHub.authenticator_class = "nativeauthenticator.NativeAuthenticator"
 
 # Allow anyone to sign-up without approval
-c.NativeAuthenticator.open_signup = True
+c.NativeAuthenticator.open_signup = False
 
 # Allowed admins
 admin = os.environ.get("JUPYTERHUB_ADMIN")
 if admin:
     c.Authenticator.admin_users = [admin]
+
+# 自定义
+# c.DummyAuthenticator.password = "Abcd200509"
+# c.Spawner.notebook_dir = '/home/{username}/work'
+# c.Spawner.default_url = ''
+## 最大内存
+c.Spawner.mem_limit = '2G'
+import os, nativeauthenticator
+c.JupyterHub.template_paths = [f"{os.path.dirname(nativeauthenticator.__file__)}/templates/"]
+print("###Print c.JupyterHub.template_paths")
+print(c.JupyterHub.template_paths)

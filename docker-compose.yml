@@ -10,9 +10,9 @@ services:
       context: .
       dockerfile: Dockerfile.jupyterhub
       args:
-        JUPYTERHUB_VERSION: latest
+        JUPYTERHUB_VERSION: 3.1.1
     restart: always
-    image: jupyterhub
+    image: hk/jupyterhub:3.1.1
     container_name: jupyterhub
     networks:
       - jupyterhub-network
@@ -32,7 +32,7 @@ services:
       # All containers will join this network
       DOCKER_NETWORK_NAME: jupyterhub-network
       # JupyterHub will spawn this Notebook image for users
-      DOCKER_NOTEBOOK_IMAGE: jupyter/minimal-notebook:latest
+      DOCKER_NOTEBOOK_IMAGE: jupyter/scipy-notebook:hub-3.1.1
       # Notebook directory inside user image
       DOCKER_NOTEBOOK_DIR: /home/jovyan/work
       # Using this run command

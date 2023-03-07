@@ -4,8 +4,13 @@ ARG JUPYTERHUB_VERSION
 FROM jupyterhub/jupyterhub:$JUPYTERHUB_VERSION
 
 # Install dockerspawner, nativeauthenticator
-RUN python3 -m pip install --no-cache-dir \
+RUN python3 -m pip install --no-cache-dir -i https://pypi.tuna.tsinghua.edu.cn/simple \
         dockerspawner==12.* \
         jupyterhub-nativeauthenticator==1.*
+
+COPY ./static/native-login.html /usr/local/lib/python3.10/dist-packages/nativeauthenticator/templates
+COPY ./static/page.html /usr/local/share/jupyterhub/share/templates
+COPY ./static/jupyter.png /usr/local/share/jupyterhub/static/images
+COPY ./static/jupyterhub-80.png /usr/local/share/jupyterhub/static/images
 
 CMD ["jupyterhub", "-f", "/srv/jupyterhub/jupyterhub_config.py"]
