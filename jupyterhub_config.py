@@ -87,3 +87,8 @@ import os, nativeauthenticator
 c.JupyterHub.template_paths = [f"{os.path.dirname(nativeauthenticator.__file__)}/templates/"]
 print("###Print c.JupyterHub.template_paths")
 print(c.JupyterHub.template_paths)
+
+## Number of days for a login cookie to be valid.
+#          Default is two weeks.
+#  Default: 14
+# c.JupyterHub.cookie_max_age_days = 14
