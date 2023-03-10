@@ -16,9 +16,9 @@ c.JupyterHub.spawner_class = "dockerspawner.DockerSpawner"
 # Spawn containers from this image
 # c.DockerSpawner.image = os.environ["DOCKER_NOTEBOOK_IMAGE"]
 c.DockerSpawner.allowed_images = {
-    "mini(基础python环境)": "jupyter/minimal-notebook:hub-3.1.1",
-    "scipy(机器学习环境)": "jupyter/scipy-notebook:hub-3.1.1",
-    "ai(高级AI环境)": "hk/ai-notebook:hub-3.1.1"
+    "mini(干净的python环境)": "jupyter/minimal-notebook:hub-3.1.1",
+    "scipy(pydata环境)": "jupyter/scipy-notebook:hub-3.1.1",
+    "ai(定制AI环境)": "hk/ai-notebook:hub-3.1.1"
     }
 
 # JupyterHub requires a single-user instance of the Notebook server, so we
